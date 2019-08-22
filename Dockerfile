@@ -5,7 +5,7 @@ ARG VCS_REF
 
 ## -------------------------------------------------------------------------------------------------
 
-FROM golang:1.12 as builder
+FROM golang:1.12 as tools
 RUN set -eux; \
     apt-get update -y && \
     apt-get install -y apt-utils upx
