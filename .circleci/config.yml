@@ -1,0 +1,58 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  info:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: /src
+    steps:
+    - run:
+        name: Environment variables
+        command: |
+          env
+  
+  build:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: /src
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: Build source image
+        command: |
+          docker build -t $CIRCLE_PROJECT_REPONAME:$CIRCLE_WORKFLOW_ID .
+  push:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: /src
+    steps:
+    - setup_remote_docker
+    - run: 
+        name: DockerHub Login
+        command: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - run:
+        name: Push to registry
+        command: |
+          docker push $DOCKER_USER/$CIRCLE_PROJECT_REPONAME:latest
+          docker push $DOCKER_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_WORKFLOW_ID
+
+workflows:
+  version: 2
+  create-images:
+    jobs:
+      - info
+      - build:
+          requires:
+          - info
+      - push:
+          requires:
+          - info
+          - build
+          filters:
+            branches:
+              only: 
+                - master

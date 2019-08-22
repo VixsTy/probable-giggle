@@ -1,0 +1,10 @@
+bin
+vendor
+tools/bin
+tools/vendor
+
+# File that can be ignored to have a better docker layer cache
+*.md
+.editorconfig
+.gitignore
+go.sum
