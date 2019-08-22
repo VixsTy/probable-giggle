@@ -5,7 +5,7 @@ ARG VCS_REF
 
 ## -------------------------------------------------------------------------------------------------
 
-FROM golang:1.12 as builder
+FROM golang:1.12 as tools
 RUN set -eux; \
     apt-get update -y && \
     apt-get install -y apt-utils upx
@@ -20,7 +20,7 @@ RUN cd tools && go run github.com/magefile/mage
 FROM tools AS source
 COPY magefile.go go.mod ./
 RUN set -eux; \
-    go run mage.go go:deps
+    go run github.com/magefile/mage go:deps
 COPY . .
 
 ## -------------------------------------------------------------------------------------------------

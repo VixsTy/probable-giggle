@@ -3,31 +3,20 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-  info:
-    docker:
-      - image: circleci/golang:1.12
-    working_directory: /src
-    steps:
-    - run:
-        name: Environment variables
-        command: |
-          env
   
   build:
     docker:
       - image: circleci/golang:1.12
-    working_directory: /src
     steps:
     - checkout
     - setup_remote_docker
     - run:
         name: Build source image
         command: |
-          docker build -t $CIRCLE_PROJECT_REPONAME:$CIRCLE_WORKFLOW_ID .
+          docker build -t $CIRCLE_PROJECT_REPONAME:$(echo $CIRCLE_SHA1 | cut -c -7) .
   push:
     docker:
       - image: circleci/golang:1.12
-    working_directory: /src
     steps:
     - setup_remote_docker
     - run: 
@@ -38,19 +27,15 @@ jobs:
         name: Push to registry
         command: |
           docker push $DOCKER_USER/$CIRCLE_PROJECT_REPONAME:latest
-          docker push $DOCKER_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_WORKFLOW_ID
+          docker push $DOCKER_USER/$CIRCLE_PROJECT_REPONAME:$(echo $CIRCLE_SHA1 | cut -c -7)
 
 workflows:
   version: 2
   create-images:
     jobs:
-      - info
-      - build:
-          requires:
-          - info
+      - build
       - push:
           requires:
-          - info
           - build
           filters:
             branches:
