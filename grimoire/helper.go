@@ -19,7 +19,7 @@ var (
 func getGoFiles() []string {
 	var goFiles []string
 
-	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+	filepath.Walk(os.Getenv("PWD"), func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(path, "vendor/") {
 			return filepath.SkipDir
 		}
@@ -31,7 +31,8 @@ func getGoFiles() []string {
 			return nil
 		}
 
-		goFiles = append(goFiles, path)
+		absPath := strings.Replace(path, os.Getenv("PWD"), ".", 1)
+		goFiles = append(goFiles, absPath)
 		return nil
 	})
 

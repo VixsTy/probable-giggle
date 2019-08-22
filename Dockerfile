@@ -17,10 +17,13 @@ RUN cd tools && go run github.com/magefile/mage
 
 ## -------------------------------------------------------------------------------------------------
 
-FROM tools AS source
-COPY magefile.go go.mod ./
+FROM tools AS deps
+COPY grimoire/ magefile.go go.mod ./
+COPY grimoire grimoire
 RUN set -eux; \
     go run github.com/magefile/mage go:deps
+
+FROM deps as source
 COPY . .
 
 ## -------------------------------------------------------------------------------------------------
@@ -43,12 +46,12 @@ ARG VCS_REF
 # Metadata
 LABEL \
     org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="Spotigraph" \
-    org.label-schema.description="Spotify Agile model mapping microservice" \
-    org.label-schema.url="https://go.zenithar.org/spotigraph" \
-    org.label-schema.vcs-url="https://github.com/Zenithar/go-spotigraph.git" \
+    org.label-schema.name="ProbableGiggle" \
+    org.label-schema.description="Typical golang project" \
+    org.label-schema.url="https://github.com/VixsTy/probable-giggle" \
+    org.label-schema.vcs-url="https://github.com/VixsTy/probable-giggle.git" \
     org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vendor="Thibault NORMAND" \
+    org.label-schema.vendor="Kevin LARQUEMIN" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0" \
     org.zenithar.licence="MIT"
