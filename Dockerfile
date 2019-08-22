@@ -20,7 +20,7 @@ RUN cd tools && go run github.com/magefile/mage
 FROM tools AS source
 COPY magefile.go go.mod ./
 RUN set -eux; \
-    go run mage.go go:deps
+    go run github.com/magefile/mage go:deps
 COPY . .
 
 ## -------------------------------------------------------------------------------------------------
