@@ -3,28 +3,9 @@
 package main
 
 import (
-	"github.com/fatih/color"
-	"github.com/magefile/mage/mg"
-	"github.com/magefile/mage/sh"
+	// mage:import
+	"github.com/VixsTy/grimoire/tools"
 )
 
-var Default = Build
-
-func Build() {
-	color.Red("# Installing tools ---------------------------------------------------------")
-	mg.SerialDeps(Go.Vendor, Go.Tools)
-}
-
-type Go mg.Namespace
-
-// Vendor create tools vendors
-func (Go) Vendor() error {
-	color.Blue("## Vendoring dependencies")
-	return sh.RunV("go", "mod", "vendor")
-}
-
-// Tools updates tools from package
-func (Go) Tools() error {
-	color.Blue("## Intalling tools")
-	return sh.RunV("go", "run", "github.com/izumin5210/gex/cmd/gex", "--build")
-}
+// Default is the default spell which will be invocated by mage
+var Default = tools.Build
