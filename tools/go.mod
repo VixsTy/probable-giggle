@@ -27,3 +27,5 @@ require (
 	gotest.tools/gotestsum v0.3.5
 	mvdan.cc/gofumpt v0.0.0-20190729090447-96300e3d49fb
 )
+
+replace github.com/VixsTy/grimoire => ../../grimoire
